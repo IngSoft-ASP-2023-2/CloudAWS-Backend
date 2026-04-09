@@ -1,0 +1,30 @@
+services:
+  localstack:
+    image: localstack/localstack:3.0
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=dynamodb
+      - DEBUG=0
+    volumes:
+      - ./localstack-init:/etc/localstack/init/ready.d
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  movie_manager_nosql:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - REGION=us-east-1
+      - DYNAMODB_TABLE_NAME=movies
+      - DYNAMODB_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    depends_on:
+      localstack:
+        condition: service_healthy

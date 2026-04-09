@@ -134,6 +134,10 @@ app.get('/test_connection', (req, res) => {
     });
 });
 
+app.get('/healt', (req, res) => {
+    res.send('¡Hola, esta es mi Web API!');
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
