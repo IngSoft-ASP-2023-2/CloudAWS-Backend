@@ -7,3 +7,5 @@ docker
 .aws
 Archive.zip
 .DS_Store
+docker-compose.yml
+localstack-init

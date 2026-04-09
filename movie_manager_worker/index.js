@@ -11,10 +11,17 @@ const logger = winston.createLogger({
     format: winston.format.json(),
     transports: [ new winston.transports.Console() ],
 });
-const sqs = new aws.SQS({ region: process.env.REGION });
-const dynamoDB = new aws.DynamoDB.DocumentClient({
-    region: process.env.REGION,
-});
+const sqsOptions = { region: process.env.REGION };
+if (process.env.SQS_ENDPOINT) {
+    sqsOptions.endpoint = process.env.SQS_ENDPOINT;
+}
+const sqs = new aws.SQS(sqsOptions);
+
+const dynamoDBOptions = { region: process.env.REGION };
+if (process.env.DYNAMODB_ENDPOINT) {
+    dynamoDBOptions.endpoint = process.env.DYNAMODB_ENDPOINT;
+}
+const dynamoDB = new aws.DynamoDB.DocumentClient(dynamoDBOptions);
 
 app.use(express.json());
 
